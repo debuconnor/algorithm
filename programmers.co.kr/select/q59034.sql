@@ -1,0 +1,1 @@
+select * from animal_ins order by 1
