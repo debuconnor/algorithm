@@ -6,8 +6,7 @@ import (
 )
 
 func main() {
-	numbers := "011"
-	number, _ := strconv.Atoi(numbers)
+	numbers := "177"
 	var origin = []int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 
 	init := make([]int, 10)
@@ -22,7 +21,7 @@ func main() {
 		origin[numbers[i]-48]++
 	}
 
-	for i := 1; i <= number; i++ {
+	for i := 1; i <= maxNumber(origin); i++ {
 		temp := strconv.Itoa(i)
 
 		for j := 0; j < len(temp); j++ {
@@ -42,6 +41,10 @@ func main() {
 }
 
 func isPrimeNumber(num int) bool {
+	if num == 1 {
+		return false
+	}
+
 	for i := 2; i*i <= num; i++ {
 		if num%i == 0 {
 			return false
@@ -49,6 +52,21 @@ func isPrimeNumber(num int) bool {
 	}
 
 	return true
+}
+
+func maxNumber(numArr []int) int {
+	num := ""
+
+	for i := 9; i >= 0; i-- {
+		_num := strconv.Itoa(i)
+
+		for j := numArr[i]; j > 0; j-- {
+			num += _num
+		}
+	}
+
+	maxNumber, _ := strconv.Atoi(num)
+	return maxNumber
 }
 
 func isContain(origin, new []int) bool {
