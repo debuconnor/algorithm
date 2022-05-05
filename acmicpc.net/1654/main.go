@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"math"
 	"os"
 )
 
@@ -33,45 +34,65 @@ func main() {
 			min = temp
 		}
 	}
+	result := 0
 
-	result := getLans(&lan, n, min, min, 0, false)
+	if k == 1{
+		result = min / n
+	} else {
+		result = getLans(&lan, n, min, max, k, n)
+	}
 
 	fmt.Fprintln(writer, result)
 }
 
-func getLans(arr *[]int, goal int, length int, min int, count int, flag bool) int {
-	if count != goal && flag {
-		return length * 2
+func getLans(arr *[]int, goal int, min int, max int, k int, n int) int {
+	m := 0
+	for {
+		count := 0
+
+		for _, v := range *arr {
+			count += v / powInt(2, m)
+		}
+
+		if count < goal{
+			break
+		}
+		m++
 	}
-
-	_count := 0
-
-	for _, v := range *arr {
-		_count += v / length
-	}
-
-	if _count < goal {
-		length /= 2
-	} else if _count > goal {
-		length += (min + length) / 2
-	} else if goal == _count {
-		flag = true
-		length++
-	}
-
-	return getLans(arr, goal, length, min, _count, flag)
+	return binSearch(powInt(2, m - 1), goal, arr, m)
 }
 
-func doubleCheck(arr *[]int, goal int, length int, count int) int {
-	if count != goal {
-		return length - 1
+
+func binSearch(l int, goal int, arr *[]int, depth int) int{
+	count := 0
+
+	if depth == 0{	
+		for _, v := range *arr{
+			count += v / (l + 1)
+		}
+
+		if goal <= count{
+			return l + 1
+		}
+
+		return l
 	}
 
-	_count := 0
-	_length := length + 1
-	for _, v := range *arr {
-		_count += v / _length
+	count = 0
+	
+	for _, v := range *arr{
+		count += v / (l + powInt(2, depth))
 	}
 
-	return doubleCheck(arr, goal, _length, _count)
+	if count < goal {
+		l = binSearch(l, goal, arr, depth - 1)
+	} else if count >= goal{
+		l = binSearch(l + powInt(2, depth), goal, arr, depth - 1)
+	}
+	
+	return l
+}
+
+func powInt(x, y int) int {
+    return int(math.Pow(float64(x), float64(y)))
 }
