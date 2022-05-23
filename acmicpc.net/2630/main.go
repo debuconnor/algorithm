@@ -24,8 +24,9 @@ func main() {
        }
    }
    
-   //white, blue := cut(matrix, n)
-   fmt.Fprintln(w, matrix[0:n / 2 - 1][n / 2 :n-1])
+   white, blue := cut(matrix, n)
+   fmt.Fprintln(w, white)
+   fmt.Fprintln(w, blue)
 }
 
 func cut(arr [][]int, size int) (int, int){
@@ -44,19 +45,19 @@ func cut(arr [][]int, size int) (int, int){
         _white := 0
         _blue := 0
         
-        white, blue = cut(arr[:_size - 1][:_size - 1], _size)
+        _white, _blue = cut(makeArr(0, _size, 0, _size, arr), _size)
         white += _white
         blue += _blue
         
-        white, blue = cut(arr[_size:][:_size - 1], _size)
+        _white, _blue = cut(makeArr(_size, size, 0, _size, arr), _size)
         white += _white
         blue += _blue
         
-        white, blue = cut(arr[:_size - 1][_size:], _size)
+        _white, _blue = cut(makeArr(0, _size, _size, size, arr), _size)
         white += _white
         blue += _blue
         
-        white, blue = cut(arr[_size:][_size:], _size)
+        _white, _blue = cut(makeArr(_size, size, _size, size, arr), _size)
         white += _white
         blue += _blue
     }
@@ -82,4 +83,18 @@ func check(arr [][]int, goal int) int{
     }
     
     return -1
+}
+
+func makeArr(startY, endY, startX, endX int, arr [][]int) (newArr [][]int){
+    newArr = make([][]int, endY - startY)
+
+    for i := startY; i < endY; i++{
+        newArr[i - startY] = make([]int, endX - startX)
+
+        for j := startX; j < endX; j++{
+            newArr[i - startY][j - startX] = arr[i][j]
+        }
+    }
+
+    return
 }
