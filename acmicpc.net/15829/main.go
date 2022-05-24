@@ -23,7 +23,6 @@ func main(){
 
 	for _, v := range str{
 		result = (result + (uint64(v - 'a') + 1) * r) % m
-	  //result += (랜덤숫자 * r) % 1234567891
 		r = (r * 31) % m
 	}
 
